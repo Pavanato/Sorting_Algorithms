@@ -4,7 +4,7 @@ This repository contains implementations of sorting algorithms along with their 
 
 # Results found so far
 
-![](sorting_algorithms\first_test.png)
+![](sorting_algorithms/first_test.png)
 
 ## Made by:
 
