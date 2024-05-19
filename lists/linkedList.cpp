@@ -1,28 +1,4 @@
-#include <iostream>
-#include <chrono>
-#include <vector>
-
-using std::cout;
-using std::endl;
-
-// Lista duplamente encadeada
-typedef struct Node
-{
-    int iPayload;
-    Node* ptrNext;
-    Node* ptrPrev;
-} Node;
-
-// Protótipos
-Node* createNode(int);
-void insertFront(Node**, int);
-void insertEnd(Node**, int);
-void displayList(Node*);
-void displayHeadAndTail(Node*);
-void computeTime(Node*, int, void (*)(Node*, int));
-void generateRandomList(Node**, int);
-void cloneList(Node*, Node**);
-void swap(Node*, Node*);
+#include "linkedList.h"
 
 Node* createNode(int iPayload) 
 {
@@ -38,13 +14,13 @@ void displayList(Node* node)
 {
     if (node == nullptr)
     {
-        cout << "Lista vazia: Não é possível realizar displayList" << endl;
+        cout << "Empty list: Unable to perform displayList" << endl;
         return;
     }
 
     if (node->ptrPrev != nullptr)
     {
-        cout << "Meio ou Fim da Lista: Não é possível realizar displayList" << endl;
+        cout << "Middle or End of the List: Unable to perform displayList" << endl;
         return;
     }
 
@@ -52,7 +28,7 @@ void displayList(Node* node)
 
     cout << "Payload: ";
 
-    //Percorremos a lista até seu fim (ptrNext do último nó é NULL)
+    // Traverse the list until the end (ptrNext of the last node is NULL)
     while (temp != nullptr)
     {
         cout << temp->iPayload << " ";
@@ -83,30 +59,30 @@ void insertEnd(Node** head, int iPayload)
 
     if (*head == nullptr)
     {
-        (*head) = newNode; // derreferenciando um ponteiro
+        (*head) = newNode; // Dereference the head pointer to store the address of the newNode
         return;
     }
 
     Node* temp = (*head);
 
-    //Percorre a lista
+    // Traverse the list
     while (temp->ptrNext != nullptr) temp = temp->ptrNext;
 
-    newNode->ptrPrev =  temp; //newNode aponta para o fim da lista
-    temp->ptrNext = newNode; //Antigo último elemento aponta para o novo nó
+    newNode->ptrPrev =  temp; // newNode points to the last element
+    temp->ptrNext = newNode; // Old last element points to the newNode
 }
 
 void displayHeadAndTail(Node* node)
 {
     if (node == nullptr)
     {
-        cout << "Lista vazia: Não é possível realizar displayHead" << endl;
+        cout << "Empty list: Unable to perform displayHeadAndTail" << endl;
         return;
     }
 
     if (node->ptrPrev != nullptr)
     {
-        cout << "Meio ou Fim da Lista: Não é possível realizar displayHead" << endl;
+        cout << "Middle or End of the List: Unable to perform displayHeadAndTail" << endl;
         return;
     }
 
@@ -114,7 +90,7 @@ void displayHeadAndTail(Node* node)
 
     cout << "Head ... Tail: ";
 
-    // Printa os 5 primeiros elementos da lista
+    // Display the first 5 elements of the list
     for (int i = 0; i < 5; i++)
     {
         cout << temp->iPayload << " ";
@@ -123,19 +99,19 @@ void displayHeadAndTail(Node* node)
 
     cout << "... ";
 
-    // Percorremos a lista até seu fim para obter o endereço do último elemento (ptrNext do último nó é NULL)
+    // Traverse the list until the end (ptrNext of the last node is NULL)
     while (temp->ptrNext != nullptr)
     {
         temp = temp->ptrNext;
     }
     
-    // Volta 5 elementos
+    // Retrieve the last 5 elements of the list
     for (int i = 0; i < 4; i++)
     {
         temp = temp->ptrPrev; 
     }
 
-    // Printa os 5 últimos elementos da lista
+    // Display the last 5 elements of the list
     for (int i = 0; i < 5; i++)
     {
         cout << temp->iPayload << " ";
@@ -145,19 +121,7 @@ void displayHeadAndTail(Node* node)
     cout << endl;
 }
 
-// Computa o tempo de execução de um algoritmo de ordenação
-void computeTime(Node* head, int iListLen, void (*sortFunc)(Node*, int)) 
-{
-    auto start = std::chrono::high_resolution_clock::now();
-    sortFunc(head, iListLen);
-    auto end = std::chrono::high_resolution_clock::now();
-
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
-
-    cout << elapsed.count();
-}
-
-// Gera listas aleatórias
+// Generate a random list of integers
 void generateRandomList(Node** head, int iListLen) 
 {
     for (int i = 0; i < iListLen; i++)
@@ -166,11 +130,10 @@ void generateRandomList(Node** head, int iListLen)
     }
 }
 
-// cria um clone da lista
+// Creates a copy of the list
 void cloneList(Node* head, Node** clonedHead) 
 {
     Node* temp = head;
-    Node* prev = nullptr;
 
     while (temp != nullptr)
     {
@@ -179,7 +142,7 @@ void cloneList(Node* head, Node** clonedHead)
     }
 }
 
-// algoritmo que troca os valores de dois nós
+// Algorithm that swaps the values of two nodes
 void swap(Node* node1, Node* node2) 
 {
     // salva o valor do node1
@@ -190,6 +153,7 @@ void swap(Node* node1, Node* node2)
     node2->iPayload = temp;
 }
 
+// Creates a list of integers from a file
 void readListFromFile(std::ifstream& inputFile, Node** head, int listSize)
 {
     for (int i = 0; i < listSize; i++)
@@ -197,5 +161,39 @@ void readListFromFile(std::ifstream& inputFile, Node** head, int listSize)
         int value;
         inputFile >> value;
         insertEnd(head, value);
+    }
+
+    // Set the read position to the beginning of the file
+    inputFile.clear();
+    inputFile.seekg(0, std::ios::beg);
+}
+
+// Next two functions are used to compute the time taken by the sorting algorithms
+void computeTimeAux(Node* head, int iListLen, void (*sortFunc)(Node*, int), std::ofstream& outputFile) 
+{
+    auto start = std::chrono::high_resolution_clock::now();
+    sortFunc(head, iListLen);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+
+    outputFile << elapsed.count() << ",";
+}
+
+void computeTime(void (*sortFunc)(Node*, int), std::ifstream& inputFile, std::ofstream& outputFile, const int iListLen, const int iNumLists) 
+{       
+    if (inputFile.is_open()) {
+        for (int i = 0; i < iNumLists; ++i) {
+            Node* head = nullptr;
+            readListFromFile(inputFile, &head, iListLen); // Read the list from the file
+            
+            computeTimeAux(head, iListLen, sortFunc, outputFile); // Compute the time taken by the sorting algorithm
+        }
+        
+        // Remove the last comma and write a newline
+        outputFile.seekp(-1, std::ios_base::end);
+        outputFile << endl;
+    } else {
+        cout << "Failed to open the input file." << endl;
     }
 }

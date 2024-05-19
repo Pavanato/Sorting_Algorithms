@@ -8,7 +8,7 @@ This file has 100 lists with random integers (from 0 to 10000) so that the tests
 
 # Results found so far
 
-![](sorting_algorithms/first_test.png)
+![](IOfiles/first_test.png)
 
 ## Made by:
 

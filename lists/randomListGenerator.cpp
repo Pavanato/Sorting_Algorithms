@@ -5,9 +5,10 @@
 using std::cout;
 using std::endl;
 
+// Not part of the linkedList.h file because it is run only once
+
 int main()
 {
-
     const int listSize = 10000;
     const int numLists = 100;
 

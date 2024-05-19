@@ -1,100 +1,60 @@
-#include <iostream>
-#include <fstream>
-#include "lists/linkedList.h"
+#include "sorting.h"
 
-using std::cout;
-using std::endl;
-using std::ifstream;
-
-
-// Protótipos algorimos de ordenação
-void selectionSort(Node*, int);
-void optimizedSelectionSort(Node*, int);
-
-int main()
+// Implementation of the Selection Sort algorithm
+void Sorting::selectionSort(Node* head, int iListLen) 
 {
-    const int listSize = 10000;
-    const int numLists = 100;
-    
-    std::ifstream inputFile("lists/randomLists.txt"); // Abre o arquivo de input
-    
-    if (inputFile.is_open()) {
-        for (int i = 0; i < numLists; ++i) {
-            Node* head = nullptr;
-            readListFromFile(inputFile, &head, listSize); // Lê a lista do arquivo
-    
-            Node* clone = nullptr;
-            cloneList(head, &clone);
-            
-            computeTime(head, listSize, selectionSort);
-            cout << ",";
-            computeTime(clone, listSize, optimizedSelectionSort);
-            cout << endl;
-        }
-        
-        inputFile.close(); // Fecha o arquivo
-    } else {
-        cout << "Failed to open the input file." << endl;
-    }
+    Node* current = head; // Pointer to the current node
+    Node* temp = head; // Temporary pointer to assist in swaps
 
-    return 0;
-}
-
-// Implementação do algoritmo Selection Sort
-void selectionSort(Node* head, int iListLen) 
-{
-    Node* current = head; // Ponteiro para o nó atual
-    Node* temp = head; // Ponteiro temporário para auxiliar nas trocas
-
-    // Loop externo para percorrer a lista
-    for (int i = 0; i < iListLen; i++)
+    // Outer loop to traverse the list
+    for (int OuterLoop = 0; OuterLoop < iListLen; OuterLoop++)
     {
-        temp = current; // Inicializa o ponteiro temporário como o nó atual
+        temp = current; // Set the temporary node as the current node
 
-        // Loop interno para encontrar o menor elemento não ordenado
-        for (int j = 0; j < iListLen - i; j++)
+        // Inner loop to find the smallest element in the unsorted part of the list
+        for (int InnerLoop = 0; InnerLoop < iListLen - OuterLoop; InnerLoop++)
         {
-            // Verifica se o valor do nó atual é maior que o valor do nó temporário
+            // Verifies if the value of the current node is greater than the value of the temporary node
             if (current->iPayload > temp->iPayload)
             {
-                swap(current, temp); // Troca os nós
+                swap(current, temp);
             }
-            temp = temp->ptrNext; // Move para o próximo nó temporário
+            temp = temp->ptrNext; // Move to the next temporary node
         }
-        current = current->ptrNext; // Move para o próximo nó atual
+        current = current->ptrNext; // Move to the next current node
     }
 }
 
-// Implementação do algoritmo Selection Sort otimizado
-void optimizedSelectionSort(Node* head, int iListLen)
+// Implementation of the optimized Selection Sort algorithm
+void Sorting::optimizedSelectionSort(Node* head, int iListLen)
 {
-    Node* current = head; // Ponteiro para o nó atual
-    Node* temp; // Ponteiro temporário para auxiliar nas trocas
-    Node* smallest; // Ponteiro para o menor elemento encontrado
+    Node* current = head; // Pointer to the current node
+    Node* temp; // Temporary pointer to assist in swaps
+    Node* smallest; // Pointer to the smallest element found
 
-    // Loop externo para percorrer a lista
-    for (int i = 0; i < iListLen; i++)
+    // Outer loop to traverse the list
+    for (int OuterLoop = 0; OuterLoop < iListLen; OuterLoop++)
     {
-        smallest = current; // Define o menor elemento como o nó atual
-        temp = current->ptrNext; // Inicializa o ponteiro temporário como o próximo nó
+        smallest = current; // Define the smallest element as the current node
+        temp = current->ptrNext; // Set the temporary node as the next node
 
-        // Loop interno para encontrar o menor elemento não ordenado
-        for (int j = 0; j < iListLen - i - 1; j++)
+        // Inner loop to find the smallest element in the unsorted part of the list
+        for (int InnerLoop = 0; InnerLoop < iListLen - OuterLoop - 1; InnerLoop++)
         {
-            // Verifica se o valor do nó atual é maior que o valor do nó temporário
+            // Verifies if the value of the smallest node is greater than the value of the temporary node
             if (smallest->iPayload > temp->iPayload)
             {
-                smallest = temp; // Atualiza o menor elemento encontrado
+                smallest = temp; // Set the smallest element as the temporary node
             }
-            temp = temp->ptrNext; // Move para o próximo nó temporário
+            temp = temp->ptrNext; // Move to the next temporary node
         }
 
-        // Se o menor elemento encontrado for menor que o nó atual, realiza a troca
+        // If the smallest element is different from the current node, swap them
         if (smallest->iPayload < current->iPayload)
         {
-            swap(smallest, current); // Troca os nós
+            swap(smallest, current);
         }
         
-        current = current->ptrNext; // Move para o próximo nó atual
+        current = current->ptrNext; // Move to the next current node
     }
 }

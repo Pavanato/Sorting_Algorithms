@@ -1,54 +1,20 @@
-#include <iostream>
-#include <fstream>
-#include "lists/linkedList.h"
+#include "sorting.h"
 
-using std::cout;
-using std::endl;
-using std::ifstream;
-
-
-// Protótipo
-void insertionSort(Node*, int);
-
-
-int main()
+// Implementation of the Insertion Sort algorithm
+void Sorting::insertionSort(Node* head, int iListLen)
 {
-    const int listSize = 10000;
-    const int numLists = 100;
-    
-    std::ifstream inputFile("lists/randomLists.txt"); // Abre o arquivo de input
-    
-    if (inputFile.is_open()) {
-        for (int i = 0; i < numLists; ++i) {
-            Node* head = nullptr;
-            readListFromFile(inputFile, &head, listSize); // Lê a lista do arquivo
-            
-            computeTime(head, listSize, insertionSort);
-            cout << endl;
-        }
-        
-        inputFile.close(); // Fecha o arquivo
-    } else {
-        cout << "Failed to open the input file." << endl;
-    }
-
-
-    return 0;
-}
-
-
-void insertionSort(Node* head, int iListLen)
-{
-    Node* insert = head;
-    Node* inner = head->ptrNext;
+    Node* insert = head; // Pointer to the node to be inserted
+    Node* inner = head->ptrNext; // Pointer to the node to be compared
+    // Outer loop to traverse the list
     for (int iOuterLoop = 0; iOuterLoop < iListLen - 1; iOuterLoop++)
     {
+        // Traverse the list until the end (ptrNext of the last node is NULL)
         while (inner->ptrPrev != nullptr && inner->iPayload < inner->ptrPrev->iPayload)
         {
             swap(inner, inner->ptrPrev);
-            inner = inner->ptrPrev;
+            inner = inner->ptrPrev; // Move to the previous node
         }
-        insert = insert->ptrNext;
-        inner = insert->ptrNext;
+        insert = insert->ptrNext; // Move to the next node
+        inner = insert->ptrNext; // Move to the next node to be compared
     }
 }
