@@ -19,6 +19,9 @@ namespace Sorting {
 
     template<typename T>
     void optimizedSelectionSort(Node<T>*, int);
+
+    template<typename T>
+    void countingSort(Node<T>*, int);
 }
 
 #endif // SORTING_H
