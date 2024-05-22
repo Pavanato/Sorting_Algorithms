@@ -1,16 +1,18 @@
-#include "linkedList.h"
+#include "linkedlist.h"
 
-Node* createNode(int iPayload) 
+template<typename T>
+Node<T>* createNode(T Payload) 
 {
-    Node* temp = (Node*) malloc(sizeof(Node));
-    temp->iPayload = iPayload;
+    Node<T>* temp = (Node<T>*) malloc(sizeof(Node<T>));
+    temp->Payload = Payload;
     temp->ptrNext = nullptr;
     temp->ptrPrev = nullptr;
 
     return temp;
 }
 
-void displayList(Node* node) 
+template<typename T>
+void displayList(Node<T>* node) 
 {
     if (node == nullptr)
     {
@@ -24,27 +26,28 @@ void displayList(Node* node)
         return;
     }
 
-    Node* temp = node;
+    Node<T>* temp = node;
 
     cout << "Payload: ";
 
-    // Traverse the list until the end (ptrNext of the last node is NULL)
+    // Traverse the list
     while (temp != nullptr)
     {
-        cout << temp->iPayload << " ";
+        cout << temp->Payload << " ";
         temp = temp->ptrNext;
     }
     
     cout << endl;
 }
 
-void insertFront(Node** head, int iPayload) 
+template<typename T>
+void insertFront(Node<T>** head, T Payload) 
 {
-    Node* newNode = createNode(iPayload);
+    Node<T>* newNode = createNode(Payload);
     
+    // If the list is not empty
     if (*head != nullptr)
     {
-        // newNode->ptrPrev = nullptr
         (*head)->ptrPrev = newNode;
         newNode->ptrNext = (*head);
         (*head) = newNode;
@@ -53,26 +56,29 @@ void insertFront(Node** head, int iPayload)
     (*head) = newNode;
 }
 
-void insertEnd(Node** head, int iPayload) 
+template<typename T>
+void insertEnd(Node<T>** head, T Payload) 
 {
-    Node* newNode = createNode(iPayload);
+    Node<T>* newNode = createNode(Payload);
 
+    // If the list is empty
     if (*head == nullptr)
     {
-        (*head) = newNode; // Dereference the head pointer to store the address of the newNode
+        (*head) = newNode;
         return;
     }
 
-    Node* temp = (*head);
+    Node<T>* temp = (*head);
 
-    // Traverse the list
+    // Find the last node
     while (temp->ptrNext != nullptr) temp = temp->ptrNext;
 
-    newNode->ptrPrev =  temp; // newNode points to the last element
-    temp->ptrNext = newNode; // Old last element points to the newNode
+    newNode->ptrPrev =  temp;
+    temp->ptrNext = newNode;
 }
 
-void displayHeadAndTail(Node* node)
+template<typename T>
+void displayHeadAndTail(Node<T>* node)
 {
     if (node == nullptr)
     {
@@ -86,91 +92,88 @@ void displayHeadAndTail(Node* node)
         return;
     }
 
-    Node* temp = node;
+    Node<T>* temp = node;
 
     cout << "Head ... Tail: ";
 
-    // Display the first 5 elements of the list
     for (int i = 0; i < 5; i++)
     {
-        cout << temp->iPayload << " ";
+        cout << temp->Payload << " ";
         temp = temp->ptrNext; 
     }
 
     cout << "... ";
 
-    // Traverse the list until the end (ptrNext of the last node is NULL)
     while (temp->ptrNext != nullptr)
     {
         temp = temp->ptrNext;
     }
     
-    // Retrieve the last 5 elements of the list
     for (int i = 0; i < 4; i++)
     {
         temp = temp->ptrPrev; 
     }
 
-    // Display the last 5 elements of the list
     for (int i = 0; i < 5; i++)
     {
-        cout << temp->iPayload << " ";
+        cout << temp->Payload << " ";
         temp = temp->ptrNext; 
     }
 
     cout << endl;
 }
 
-// Generate a random list of integers
-void generateRandomList(Node** head, int iListLen) 
+template<typename T>
+void generateRandomList(Node<T>** head, int iListLen) 
 {
     for (int i = 0; i < iListLen; i++)
     {
-        insertEnd(head, rand() % 10000);
+        insertEnd(head, rand() % 100);
     }
 }
 
-// Creates a copy of the list
-void cloneList(Node* head, Node** clonedHead) 
+template<typename T>
+void cloneList(Node<T>* head, Node<T>** clonedHead) 
 {
-    Node* temp = head;
+    Node<T>* temp = head;
 
+    // Traverse the list
     while (temp != nullptr)
     {
-        insertEnd(clonedHead, temp->iPayload);
+        insertEnd(clonedHead, temp->Payload);
         temp = temp->ptrNext;
     }
 }
 
-// Algorithm that swaps the values of two nodes
-void swap(Node* node1, Node* node2) 
+template<typename T>
+void swap(Node<T>* node1, Node<T>* node2) 
 {
-    // salva o valor do node1
-    int temp = node1->iPayload;
-
-    // troca os valores
-    node1->iPayload = node2->iPayload;
-    node2->iPayload = temp;
+    // Swap the Payloads of the two nodes
+    T temp = node1->Payload;
+    node1->Payload = node2->Payload;
+    node2->Payload = temp;
 }
 
-// Creates a list of integers from a file
-void readListFromFile(std::ifstream& inputFile, Node** head, int listSize)
+template<typename T>
+void readListFromFile(std::ifstream& inputFile, Node<T>** head, int listSize)
 {
     for (int i = 0; i < listSize; i++)
     {
-        int value;
+        // Read the value from the file and insert it at the end of the list
+        T value;
         inputFile >> value;
         insertEnd(head, value);
     }
 
-    // Set the read position to the beginning of the file
+    // Reset the file pointer to the beginning of the file
     inputFile.clear();
     inputFile.seekg(0, std::ios::beg);
 }
 
-// Next two functions are used to compute the time taken by the sorting algorithms
-void computeTimeAux(Node* head, int iListLen, void (*sortFunc)(Node*, int), std::ofstream& outputFile) 
+template<typename T>
+void computeTimeAux(Node<T>* head, int iListLen, void (*sortFunc)(Node<T>*, int), std::ofstream& outputFile) 
 {
+    // Compute the time taken to sort the list
     auto start = std::chrono::high_resolution_clock::now();
     sortFunc(head, iListLen);
     auto end = std::chrono::high_resolution_clock::now();
@@ -180,20 +183,35 @@ void computeTimeAux(Node* head, int iListLen, void (*sortFunc)(Node*, int), std:
     outputFile << elapsed.count() << ",";
 }
 
-void computeTime(void (*sortFunc)(Node*, int), std::ifstream& inputFile, std::ofstream& outputFile, const int iListLen, const int iNumLists) 
+template<typename T>
+void computeTime(void (*sortFunc)(Node<T>*, int), std::ifstream& inputFile, std::ofstream& outputFile, const int iListLen, const int iNumLists) 
 {       
     if (inputFile.is_open()) {
+        // Test the sorting algorithm with multiple lists
         for (int i = 0; i < iNumLists; ++i) {
-            Node* head = nullptr;
-            readListFromFile(inputFile, &head, iListLen); // Read the list from the file
+            Node<T>* head = nullptr;
+            readListFromFile(inputFile, &head, iListLen);
             
-            computeTimeAux(head, iListLen, sortFunc, outputFile); // Compute the time taken by the sorting algorithm
+            // Compute the time taken to sort the list
+            computeTimeAux(head, iListLen, sortFunc, outputFile);
         }
         
-        // Remove the last comma and write a newline
+        // Remove the last comma from the file
         outputFile.seekp(-1, std::ios_base::end);
         outputFile << endl;
     } else {
         cout << "Failed to open the input file." << endl;
     }
 }
+
+// Explicit instantiation for int
+template void insertFront<int>(Node<int>**, int);
+template void insertEnd<int>(Node<int>**, int);
+template void displayList<int>(Node<int>*);
+template void displayHeadAndTail<int>(Node<int>*);
+template void generateRandomList<int>(Node<int>**, int);
+template void cloneList<int>(Node<int>*, Node<int>**);
+template void swap<int>(Node<int>*, Node<int>*);
+template void readListFromFile<int>(std::ifstream&, Node<int>**, int);
+template void computeTimeAux<int>(Node<int>*, int, void (*sortFunc)(Node<int>*, int), std::ofstream&);
+template void computeTime<int>(void (*sortFunc)(Node<int>*, int), std::ifstream&, std::ofstream&, const int, const int);

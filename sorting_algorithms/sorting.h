@@ -1,15 +1,24 @@
 #ifndef SORTING_H
 #define SORTING_H
 
-#include "../lists/linkedList.h"
+#include "../lists/linkedlist.h"
 
 // Namespace for the sorting algorithms
 namespace Sorting {
-    void bubbleSort(Node*, int);
-    void optimizedBubbleSort(Node*, int);
-    void insertionSort(Node*, int);
-    void selectionSort(Node*, int);
-    void optimizedSelectionSort(Node*, int);
+    template<typename T>
+    void bubbleSort(Node<T>*, int);
+
+    template<typename T>
+    void optimizedBubbleSort(Node<T>*, int);
+
+    template<typename T>
+    void insertionSort(Node<T>*, int);
+
+    template<typename T>
+    void selectionSort(Node<T>*, int);
+
+    template<typename T>
+    void optimizedSelectionSort(Node<T>*, int);
 }
 
 #endif // SORTING_H

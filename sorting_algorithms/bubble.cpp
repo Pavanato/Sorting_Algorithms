@@ -1,57 +1,60 @@
 #include "sorting.h"
 
-// Implementation of the Bubble Sort algorithm
-void Sorting::bubbleSort(Node* head, int iListLen) 
+template<typename T>
+void Sorting::bubbleSort(Node<T>* head, int iListLen) 
 {
-    Node* current = head; // Pointer to the current node
+    if (head == nullptr) return;
+
+    Node<T>* current = head;
 
     // Outer loop to traverse the list
     for (int OuterLoop = 0; OuterLoop < iListLen - 1; OuterLoop++)
     {
-        // Loop interno para comparar pares adjacentes e fazer as trocas necessárias
-        for (int InnerLoop = 0; InnerLoop < iListLen - 1; InnerLoop++)
+        current = head; // Reset current at the start of each outer loop
+        for (int InnerLoop = 0; InnerLoop < iListLen - OuterLoop - 1; InnerLoop++)
         {
-            // Verifies if the value of the current node is greater than the next node in the list
-            if (current->iPayload > current->ptrNext->iPayload)
+            // 
+            if (current->ptrNext != nullptr && current->Payload > current->ptrNext->Payload)
             {
                 swap(current, current->ptrNext);
             }
-            current = current->ptrNext; // Move to the next node
+            current = current->ptrNext;
         }
-        current = head; // Reset the current position to the beginning of the list
     }
 }
 
-// Implementation of the optimized Bubble Sort algorithm
-void Sorting::optimizedBubbleSort(Node* head, int iListLen) 
+template<typename T>
+void Sorting::optimizedBubbleSort(Node<T>* head, int iListLen) 
 {
-    Node* current = head; // Pointer to the current node
-    bool bSwapped; // Flag to check if a swap occurred
+    if (head == nullptr) return;
+
+    Node<T>* current = head;
+    bool bSwapped; // Flag to check if any swaps were made
 
     // Outer loop to traverse the list
     for (int OuterLoop = 0; OuterLoop < iListLen - 1; OuterLoop++)
     {
-        bSwapped = false; // Reset the swap flag
+        bSwapped = false;
+        current = head; // Reset current at the start of each outer loop
 
-        // Inner loop to compare adjacent pairs and make the necessary swaps
         for (int InnerLoop = 0; InnerLoop < iListLen - OuterLoop - 1; InnerLoop++)
         {
-            // Verifies if the value of the current node is greater than the next node in the list
-            if (current->iPayload > current->ptrNext->iPayload)
+            if (current->ptrNext != nullptr && current->Payload > current->ptrNext->Payload)
             {
                 swap(current, current->ptrNext);
-                bSwapped = true; // Set the swap flag to true
+                bSwapped = true;
             }
-            
-            current = current->ptrNext; // Move to the next node
+            current = current->ptrNext;
         }
-        
-        // If no swaps were made, the list is already sorted
-        if (bSwapped == false)
+
+        // If no swaps were made, the list is sorted
+        if (!bSwapped)
         {
             break;
         }
-
-        current = head; // Reset the current position to the beginning of the list
     }
 }
+
+// Explicit template instantiation for int
+template void Sorting::bubbleSort<int>(Node<int>* head, int iListLen);
+template void Sorting::optimizedBubbleSort<int>(Node<int>* head, int iListLen);
