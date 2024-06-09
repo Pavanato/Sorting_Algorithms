@@ -3,6 +3,8 @@
 
 #include "../lists/linkedlist.h"
 
+using namespace LinkedList;
+
 // Namespace for the sorting algorithms
 namespace Sorting {
     template<typename T>

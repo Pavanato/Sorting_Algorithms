@@ -1,5 +1,7 @@
 #include "linkedlist.h"
 
+namespace LinkedList
+{ 
 template<typename T>
 Node<T>* createNode(T Payload) 
 {
@@ -215,3 +217,4 @@ template void swap<int>(Node<int>*, Node<int>*);
 template void readListFromFile<int>(std::ifstream&, Node<int>**, int);
 template void computeTimeAux<int>(Node<int>*, int, void (*sortFunc)(Node<int>*, int), std::ofstream&);
 template void computeTime<int>(void (*sortFunc)(Node<int>*, int), std::ifstream&, std::ofstream&, const int, const int);
+}

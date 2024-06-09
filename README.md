@@ -8,7 +8,13 @@ This file has 100 lists with random integers (from 0 to 10000) so that the tests
 
 # Results found so far
 
-![](IOfiles/first_test.png)
+![](IOfiles/second_test.png)
+
+In logarithmic scale:
+
+![](IOfiles/second_test_log.png)
+
+
 
 ## Made by:
 
