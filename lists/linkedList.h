@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include "../tree/binary_search_tree.h"
 
 using std::cout;
 using std::endl;
@@ -28,6 +29,9 @@ namespace LinkedList
 
     template<typename T>
     void insertEnd(Node<T>**, T);
+
+    template<typename T>
+    void removeFront(Node<T>**);
 
     template<typename T>
     void displayList(Node<T>*);
